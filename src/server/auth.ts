@@ -35,6 +35,8 @@ declare module "next-auth" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
+
+const scopes = ["identify"].join(" ");
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: ({ session, user }) => ({
@@ -48,8 +50,9 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+      authorization: { params: { scope: scopes } },
     }),
     /**
      * ...add more providers here.
