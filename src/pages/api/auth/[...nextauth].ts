@@ -1,4 +1,15 @@
 import NextAuth from "next-auth";
-import { authOptions } from " /server/auth";
+import DiscordProvider from "next-auth/providers/discord";
 
-export default NextAuth(authOptions);
+// https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes
+const scopes = ["identify"].join(" ");
+
+export default NextAuth({
+  providers: [
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+      authorization: { params: { scope: scopes } },
+    }),
+  ],
+});
